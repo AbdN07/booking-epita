@@ -1,6 +1,5 @@
 package dev._xdbe.booking.creelhouse.infrastructure.persistence;
 
-
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.NoSuchPaddingException;
@@ -12,7 +11,6 @@ import jakarta.persistence.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dev._xdbe.booking.creelhouse.infrastructure.persistence.CryptographyHelper;
-
 
 @Converter
 public class CreditCardConverter implements AttributeConverter<String, String> {
@@ -38,9 +36,16 @@ public class CreditCardConverter implements AttributeConverter<String, String> {
 
     private String panMasking(String pan) {
         // Step 6:
-        return pan;
-        // Step 6: End
-    }
+        if (pan == null || pan.length() <= 8) {
+            return pan;
+        }
 
-    
+       int longueur = pan.length();
+       String debut = pan.substring(0, 4);
+       String fin = pan.substring(longueur - 4);
+       String mil = "*".repeat(longueur - 8);
+
+       return debut + mil + fin;
+       // Step 6: End
+    }
 }
